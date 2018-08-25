@@ -1,4 +1,4 @@
-package com.vodafone;
+package com.vodafone.app;
 
 import org.junit.Test;
 
