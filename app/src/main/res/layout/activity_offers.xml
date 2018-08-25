@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    xmlns:diagonal="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_layout"
+    android:layout_height="match_parent">
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:fillViewport="true"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+    <com.github.florent37.diagonallayout.DiagonalLayout
+        android:id="@+id/diagonalLayout"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        diagonal:diagonal_angle="10"
+        diagonal:diagonal_position="bottom"
+        diagonal:diagonal_direction="left"
+        diagonal:diagonal_handleMargins="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <com.flaviofaria.kenburnsview.KenBurnsView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/silhouette_default"
+            />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:background="#000000"
+            android:alpha="0.5"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/cat_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="65dp"
+                android:textAlignment="center"
+                android:padding="5dp"
+                android:fontFamily="sans-serif"
+                android:text="Category Name"
+                android:textColor="#fff"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+    </com.github.florent37.diagonallayout.DiagonalLayout>
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:id="@+id/offers_recycler"
+                android:nestedScrollingEnabled="false"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+
+
+</LinearLayout>

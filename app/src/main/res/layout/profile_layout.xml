@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:layout_height="match_parent">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/profile_pic"
+        android:layout_width="156dp"
+        android:elevation="15dp"
+        android:layout_height="156dp"
+        android:layout_margin="30dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/silhouette_default"/>
+
+    <LinearLayout
+        android:layout_below="@+id/profile_pic"
+        android:layout_width="match_parent"
+        android:layout_margin="30dp"
+        android:id="@+id/info"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="match_parent"
+                android:text="Balance"
+                android:textSize="20sp"
+                android:elevation="10dp"
+                android:fontFamily="sans-serif"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="match_parent"
+                android:text="₹100"
+                android:layout_marginTop="5dp"
+                android:fontFamily="sans-serif"
+                android:textStyle="bold"
+                android:textSize="19sp"
+                android:textColor="#00e676"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="match_parent"
+                android:text="Data Left"
+                android:textSize="20sp"
+                android:elevation="10dp"
+                android:fontFamily="sans-serif"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="match_parent"
+                android:text="467 MB"
+                android:textColor="#ffca28"
+                android:layout_marginTop="5dp"
+                android:fontFamily="sans-serif"
+                android:textStyle="bold"
+                android:textSize="19sp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
