@@ -25,12 +25,16 @@
             <meta-data android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".OffersActivity"
-        android:theme="@style/AppTheme.NoActionBar">
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".OffersActivity"
+            android:theme="@style/AppTheme.NoActionBar">
 
-    </activity>
-        <activity android:name=".ProfileActivity"
+        </activity>
+        <activity
+            android:name=".ProfileActivity"
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
