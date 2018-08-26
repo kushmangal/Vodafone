@@ -48,6 +48,9 @@ public class OffersActivity extends AppCompatActivity {
     @Bind(R.id.cat_name)
     TextView cat_name;
 
+    @Bind(R.id.no_offers)
+    TextView no_offers;
+
 
     OffersAdapter adapter;
     SharedPreferences pref;
@@ -83,6 +86,8 @@ public class OffersActivity extends AppCompatActivity {
                     API_RESPONSE data = response.body();
                     if (data != null) {
                         if (data.getStatus() == 1) {
+                            offers_recycler.setVisibility(View.VISIBLE);
+                            no_offers.setVisibility(View.GONE);
                             if(data.getShow_title()==1) {
                                 cat_name.setText(String.valueOf(target_id.charAt(0)).toUpperCase() + target_id.substring(1, target_id.length()));
                                 diagonalLayout.setVisibility(View.VISIBLE);
@@ -92,8 +97,43 @@ public class OffersActivity extends AppCompatActivity {
 
                             offers = data.getOffers();
                             offers_recycler.getAdapter().notifyDataSetChanged();
+                        } else {
+                            no_offers.setVisibility(View.VISIBLE);
+                            offers_recycler.setVisibility(View.GONE);
+                            diagonalLayout.setVisibility(View.GONE);
                         }
                     }
+
+            }
+
+            @Override
+            public void onFailure(Call<API_RESPONSE> call, Throwable t) {
+                try {
+                    t.printStackTrace();
+                } catch (Exception e) {
+                }
+            }
+        });
+
+    }
+
+    public void submitResponse(String uid, String offerID, String category, String answer, String type, final int position){
+        Retrofit retrofit = RetrofitWrapper.getRetrofitRequest(getApplicationContext(), pref);
+        final API offers_api = retrofit.create(API.class);
+        Call<API_RESPONSE> call = offers_api.submitQuiz(uid, offerID, category, answer, type);
+        call.enqueue(new Callback<API_RESPONSE>() {
+            @Override
+            public void onResponse(Call<API_RESPONSE> call, Response<API_RESPONSE> response) {
+
+                API_RESPONSE data = response.body();
+                if (data != null) {
+                    if (data.getStatus() == 1) {
+                        offers.get(position).setIsRedeemed(1);
+                        offers.remove(position);
+                        Toast.makeText(getApplicationContext(),data.getMsg() ,Toast.LENGTH_SHORT ).show();
+                        offers_recycler.getAdapter().notifyItemRemoved(position);
+                    }
+                }
 
             }
 
@@ -136,58 +176,68 @@ public class OffersActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull Holder holder, int position) {
+        public void onBindViewHolder(@NonNull Holder holder, final int position) {
             final Offers_Response data = offers.get(position);
-            if (data != null) {
-                if (data.getImage_url() != null) {
-                    holder.offer_image.setVisibility(View.VISIBLE);
-                    Picasso.with(getApplicationContext()).load(data.getImage_url()).into(holder.offer_image);
-                } else {
-                    holder.offer_image.setVisibility(View.GONE);
-                }
-                holder.offer_title.setText(data.getTitle());
-                holder.offer_desc.setText(data.getDescription());
+            if(data.getIsRedeemed()!=1) {
+                if (data != null) {
+                    if (data.getImage_url() != null) {
+                        holder.offer_image.setVisibility(View.VISIBLE);
+                        Picasso.with(getApplicationContext()).load(data.getImage_url()).into(holder.offer_image);
+                    } else {
+                        holder.offer_image.setVisibility(View.GONE);
+                    }
+                    holder.offer_title.setText(data.getTitle());
+                    holder.offer_desc.setText(data.getDescription());
 
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(data.getQuestion()!=null){
-                            final Dialog dialog = new Dialog(OffersActivity.this);
-                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            dialog.setContentView(R.layout.question_dialog);
-                            final RadioGroup rg = (RadioGroup)dialog.findViewById(R.id.radio_group);
-                            TextView question = (TextView)dialog.findViewById(R.id.questionTV);
-                            Button btn = (Button)dialog.findViewById(R.id.redeem_btn);
+                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (data.getQuestion() != null) {
+                                final Dialog dialog = new Dialog(OffersActivity.this);
+                                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                dialog.setContentView(R.layout.question_dialog);
+                                final RadioGroup rg = (RadioGroup) dialog.findViewById(R.id.radio_group);
+                                TextView question = (TextView) dialog.findViewById(R.id.questionTV);
+                                Button btn = (Button) dialog.findViewById(R.id.redeem_btn);
 
-                            if(data.getQuestion().getQuestion()!=null)
-                            question.setText(data.getQuestion().getQuestion());
+                                if (data.getQuestion().getQuestion() != null)
+                                    question.setText(data.getQuestion().getQuestion());
 
-                            for (int i = 0; i < data.getQuestion().getOptions().size(); i++) {
-                                RadioButton rdbtn = new RadioButton(OffersActivity.this);
-                                rdbtn.setId(i);
-                                rdbtn.setText(data.getQuestion().getOptions().get(i).getDisplay_name());
-                                rg.addView(rdbtn);
-                            }
-                            btn.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-//                                    rg.getCheckedRadioButtonId()
+                                for (int i = 0; i < data.getQuestion().getOptions().size(); i++) {
+                                    RadioButton rdbtn = new RadioButton(OffersActivity.this);
+                                    rdbtn.setId(i);
+                                    rdbtn.setText(data.getQuestion().getOptions().get(i).getDisplay_name());
+                                    rg.addView(rdbtn);
                                 }
-                            });
-                            dialog.show();
+                                btn.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        submitResponse(pref.getString("uid", ""), String.valueOf(data.getOffer_id()), data.getOffer_category(), data.getQuestion().getOptions().get(rg.getCheckedRadioButtonId()).getName(), String.valueOf(data.getQuestion().getType()),position);
+                                        dialog.dismiss();
+                                    }
+                                });
+                                dialog.show();
+
+                            } else {
+                                submitResponse(pref.getString("uid", ""), String.valueOf(data.getOffer_id()), data.getOffer_category(), "", "",position);
+                            }
 
                         }
-                    }
-                });
+                    });
 
+                }
             }
         }
 
 
         @Override
         public int getItemCount() {
-            if (offers == null)
+            if (offers == null) {
+                no_offers.setVisibility(View.VISIBLE);
+                offers_recycler.setVisibility(View.GONE);
+                diagonalLayout.setVisibility(View.GONE);
                 return 0;
+            }
             return offers.size();
 
         }
