@@ -1,14 +1,12 @@
 package com.vodafone.app;
+
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
@@ -16,40 +14,27 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.LinearInterpolator;
-import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.ProgressBar;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
-
 
 import com.narayanacharya.waveview.WaveView;
 
+import net.steamcrafted.materialiconlib.MaterialIconView;
+
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
-import ai.api.AIServiceException;
 import ai.api.android.AIConfiguration;
 import ai.api.android.AIDataService;
-import ai.api.model.AIContext;
-import ai.api.model.AIEvent;
 import ai.api.model.AIRequest;
 import ai.api.model.AIResponse;
-import ai.api.model.Entity;
-import ai.api.model.EntityEntry;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -59,12 +44,28 @@ public class MainActivity extends AppCompatActivity implements
     @Bind(R.id.waveView)
     WaveView sine;
 
-    @Bind(R.id.button)
-    Button offers;
-
-    private static final int REQUEST_RECORD_PERMISSION = 100;
-    private FloatingActionButton toggleButton;
+    static TextView recieved;
+    @Bind(R.id.user_image)
+    ImageView userImage;
+    @Bind(R.id.text)
+    TextView text;
+    @Bind(R.id.text2)
+    TextView text2;
+    @Bind(R.id.text3)
+    TextView text3;
+    @Bind(R.id.text4)
+    TextView text4;
+    @Bind(R.id.text5)
+    TextView text5;
+    @Bind(R.id.text6)
+    TextView text6;
+    static RelativeLayout mainLayout;
+    @Bind(R.id.sent)
+    TextView sent;
+    @Bind(R.id.record)
+    MaterialIconView record;
     private SpeechRecognizer speech = null;
+    private static final int REQUEST_RECORD_PERMISSION = 100;
     private Intent recognizerIntent;
     private String LOG_TAG = "VoiceRecognitionActivity";
     SharedPreferences pref;
@@ -81,7 +82,8 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        toggleButton = (FloatingActionButton) findViewById(R.id.toggleButton1);
+        recieved = findViewById(R.id.recieved);
+        mainLayout = findViewById(R.id.main_layout);
         obj = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
@@ -102,8 +104,7 @@ public class MainActivity extends AppCompatActivity implements
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3);
-
-        toggleButton.setOnClickListener(new View.OnClickListener() {
+        record.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ActivityCompat.requestPermissions
@@ -113,13 +114,31 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
-        offers.setOnClickListener(new View.OnClickListener() {
+        text3.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), OffersActivity.class);
-                startActivity(i);
+            public void onClick(View view) {
+                search(text3.getText().toString());
             }
         });
+        text4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                search(text4.getText().toString());
+            }
+        });
+        text5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                search(text5.getText().toString());
+            }
+        });
+        text6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                search(text6.getText().toString());
+            }
+        });
+
     }
 
 
@@ -139,9 +158,14 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void inititlizeSpeech() {
-        if (speech!=null)
+        sent.setText("");
+        recieved.setText("");
+        sent.setVisibility(View.GONE);
+        recieved.setVisibility(View.GONE);
+        mainLayout.setVisibility(View.VISIBLE);
+        if (speech != null)
             speech.destroy();
-        speech=null;
+        speech = null;
         speech = SpeechRecognizer.createSpeechRecognizer(this);
         speech.setRecognitionListener(this);
 
@@ -171,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onBeginningOfSpeech() {
         Log.i(LOG_TAG, "onBeginningOfSpeech");
-        toggleButton.setVisibility(View.GONE);
+        record.setVisibility(View.GONE);
         sine.setVisibility(View.VISIBLE);
     }
 
@@ -184,32 +208,29 @@ public class MainActivity extends AppCompatActivity implements
     public void onEndOfSpeech() {
         Log.i(LOG_TAG, "onEndOfSpeech");
         sine.setVisibility(View.GONE);
-        toggleButton.setVisibility(View.VISIBLE);
+        record.setVisibility(View.VISIBLE);
         speech.stopListening();
     }
 
     @Override
     public void onError(int errorCode) {
         String errorMessage = getErrorText(errorCode);
-        Log.d(LOG_TAG, "FAILED " + errorMessage);
-        speech.stopListening();
+        if (speech != null)
+            speech.destroy();
+        record.setVisibility(View.VISIBLE);
         sine.setVisibility(View.GONE);
-        toggleButton.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onEvent(int arg0, Bundle arg1) {
-        Log.i(LOG_TAG, "onEvent");
     }
 
     @Override
     public void onPartialResults(Bundle arg0) {
-        Log.i(LOG_TAG, "onPartialResults");
     }
 
     @Override
     public void onReadyForSpeech(Bundle arg0) {
-        Log.i(LOG_TAG, "onReadyForSpeech");
     }
 
     @Override
@@ -220,12 +241,26 @@ public class MainActivity extends AppCompatActivity implements
         String text = "";
         for (String result : matches)
             text += result + "\n";
+        search(matches.get(0));
 
+    }
 
+    private void search(String s) {
+        if (speech != null) {
+            speech.destroy();
+        }
+        record.setVisibility(View.VISIBLE);
+        sine.setVisibility(View.GONE);
+        if (s != null && s.length() > 0) {
+            sent.setVisibility(View.VISIBLE);
+            sent.setText(s);
+            mainLayout.setVisibility(View.GONE);
+        }
         final AIRequest aiRequest = new AIRequest();
-        aiRequest.setQuery(String.valueOf(matches.get(0))+" "+uid);
+        aiRequest.setQuery(String.valueOf(s) + " " + uid);
         new MyTask().execute(aiRequest);
     }
+
 
     @Override
     public void onRmsChanged(float rmsdB) {
@@ -296,6 +331,9 @@ public class MainActivity extends AppCompatActivity implements
             if (aiResponse != null) {
                 if (aiResponse.getResult() != null && aiResponse.getResult().getFulfillment() != null && aiResponse.getResult().getFulfillment().getSpeech() != null) {
                     obj.speak(aiResponse.getResult().getFulfillment().getSpeech(), TextToSpeech.QUEUE_FLUSH, null);
+                    recieved.setVisibility(View.VISIBLE);
+                    recieved.setText(aiResponse.getResult().getFulfillment().getSpeech());
+                    mainLayout.setVisibility(View.GONE);
                     if (aiResponse.getResult() != null && aiResponse.getResult().getFulfillment() != null && aiResponse.getResult().getFulfillment().getData() != null) {
 
                         if (aiResponse.getResult().getFulfillment().getData().get("target_id") != null)
