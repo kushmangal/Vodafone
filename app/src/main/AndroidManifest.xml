@@ -25,6 +25,10 @@
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".OffersActivity"
+        android:theme="@style/AppTheme.NoActionBar">
+
+    </activity>
+        <activity android:name=".ProfileActivity"
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>

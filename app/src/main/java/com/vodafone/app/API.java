@@ -10,4 +10,8 @@ public interface API {
     @FormUrlEncoded
     @POST("fetch/offers/")
     Call<API_RESPONSE> fetchOffers(@Field("uid") String uid, @Field("topic") String topic);
+
+    @FormUrlEncoded
+    @POST("fetch/user/")
+    Call<API_RESPONSE> fetchUser(@Field("uid") String uid);
 }

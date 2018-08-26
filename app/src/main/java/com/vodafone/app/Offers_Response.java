@@ -5,6 +5,7 @@ class Offers_Response {
     private String description = "";
     private String offer_category = "";
     private String image_url = "";
+    private QuestionDialog question;
 
     private int offer_id = 0;
 
@@ -50,5 +51,11 @@ class Offers_Response {
         this.image_url = image_url;
     }
 
+    public QuestionDialog getQuestion() {
+        return question;
+    }
 
+    public void setQuestion(QuestionDialog question) {
+        this.question = question;
+    }
 }
