@@ -96,7 +96,6 @@ public class MainActivity extends AppCompatActivity implements
 
         if (pref != null)
             uid = pref.getString("uid", "");
-        Toast.makeText(getApplicationContext(), uid, Toast.LENGTH_SHORT).show();
 
         recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE,

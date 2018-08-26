@@ -93,7 +93,7 @@ public class ProfileActivity extends AppCompatActivity {
                                     plan_card.setVisibility(View.GONE);
                                 }
 
-                                if(user.getServices().size()>0){
+                                if(user.getServices()!=null && user.getServices().size()>0){
                                     String text="";
                                     for(int i=0;i<user.getServices().size();i++)
                                         text += user.getServices().get(i)+"\n";

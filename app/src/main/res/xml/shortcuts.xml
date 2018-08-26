@@ -26,4 +26,17 @@
         <categories android:name="android.shortcut.conversation" />
     </shortcut>
 
+    <shortcut
+        android:shortcutId="Voice"
+        android:enabled="true"
+        android:icon="@drawable/profile"
+        android:shortcutShortLabel="@string/shortcut_profile"
+        android:shortcutLongLabel="@string/shortcut_profile">
+        <intent
+            android:action="android.intent.action.ACTION_RECOGNIZE_SPEECH"
+            android:targetPackage="com.vodafone.app"
+            android:targetClass="com.vodafone.app.MainActivity" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+
 </shortcuts>

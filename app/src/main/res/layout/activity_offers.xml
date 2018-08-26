@@ -47,7 +47,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@drawable/silhouette_default"
+            android:id="@+id/ken"
+            android:src="@drawable/shopping"
             />
 
 
