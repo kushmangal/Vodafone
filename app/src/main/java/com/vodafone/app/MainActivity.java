@@ -36,13 +36,16 @@ import com.narayanacharya.waveview.WaveView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import ai.api.AIServiceException;
 import ai.api.android.AIConfiguration;
 import ai.api.android.AIDataService;
 import ai.api.model.AIContext;
+import ai.api.model.AIEvent;
 import ai.api.model.AIRequest;
 import ai.api.model.AIResponse;
 import ai.api.model.Entity;
@@ -60,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements
     Button offers;
 
     private static final int REQUEST_RECORD_PERMISSION = 100;
-    private TextView returnedText;
     private FloatingActionButton toggleButton;
     private SpeechRecognizer speech = null;
     private Intent recognizerIntent;
@@ -79,7 +81,6 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        returnedText = (TextView) findViewById(R.id.textView1);
         toggleButton = (FloatingActionButton) findViewById(R.id.toggleButton1);
         obj = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
             @Override
@@ -95,9 +96,6 @@ public class MainActivity extends AppCompatActivity implements
             uid = pref.getString("uid", "");
         Toast.makeText(getApplicationContext(), uid, Toast.LENGTH_SHORT).show();
 
-        speech = SpeechRecognizer.createSpeechRecognizer(this);
-        Log.i(LOG_TAG, "isRecognitionAvailable: " + SpeechRecognizer.isRecognitionAvailable(this));
-        speech.setRecognitionListener(this);
         recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE,
                 "en");
@@ -131,12 +129,22 @@ public class MainActivity extends AppCompatActivity implements
         switch (requestCode) {
             case REQUEST_RECORD_PERMISSION:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    inititlizeSpeech();
                     speech.startListening(recognizerIntent);
                 } else {
                     Toast.makeText(MainActivity.this, "Permission Denied!", Toast
                             .LENGTH_SHORT).show();
                 }
         }
+    }
+
+    private void inititlizeSpeech() {
+        if (speech!=null)
+            speech.destroy();
+        speech=null;
+        speech = SpeechRecognizer.createSpeechRecognizer(this);
+        speech.setRecognitionListener(this);
+
     }
 
     @Override
@@ -184,7 +192,6 @@ public class MainActivity extends AppCompatActivity implements
     public void onError(int errorCode) {
         String errorMessage = getErrorText(errorCode);
         Log.d(LOG_TAG, "FAILED " + errorMessage);
-        returnedText.setText(errorMessage);
         speech.stopListening();
         sine.setVisibility(View.GONE);
         toggleButton.setVisibility(View.VISIBLE);
@@ -214,10 +221,9 @@ public class MainActivity extends AppCompatActivity implements
         for (String result : matches)
             text += result + "\n";
 
-        returnedText.setText(text);
 
         final AIRequest aiRequest = new AIRequest();
-        aiRequest.setQuery(String.valueOf(matches.get(0)) + " " + uid);
+        aiRequest.setQuery(String.valueOf(matches.get(0))+" "+uid);
         new MyTask().execute(aiRequest);
     }
 

@@ -1,7 +1,9 @@
 package com.vodafone.app;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -12,8 +14,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.florent37.diagonallayout.DiagonalLayout;
 import com.squareup.picasso.Picasso;
@@ -22,6 +29,9 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import nl.dionsegijn.konfetti.KonfettiView;
+import nl.dionsegijn.konfetti.models.Shape;
+import nl.dionsegijn.konfetti.models.Size;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,6 +47,7 @@ public class OffersActivity extends AppCompatActivity {
 
     @Bind(R.id.cat_name)
     TextView cat_name;
+
 
     OffersAdapter adapter;
     SharedPreferences pref;
@@ -57,6 +68,8 @@ public class OffersActivity extends AppCompatActivity {
         adapter = new OffersAdapter();
         offers_recycler.setAdapter(adapter);
         fetchOffers();
+
+
     }
 
     void fetchOffers() {
@@ -134,6 +147,38 @@ public class OffersActivity extends AppCompatActivity {
                 }
                 holder.offer_title.setText(data.getTitle());
                 holder.offer_desc.setText(data.getDescription());
+
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(data.getQuestion()!=null){
+                            final Dialog dialog = new Dialog(OffersActivity.this);
+                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            dialog.setContentView(R.layout.question_dialog);
+                            final RadioGroup rg = (RadioGroup)dialog.findViewById(R.id.radio_group);
+                            TextView question = (TextView)dialog.findViewById(R.id.questionTV);
+                            Button btn = (Button)dialog.findViewById(R.id.redeem_btn);
+
+                            if(data.getQuestion().getQuestion()!=null)
+                            question.setText(data.getQuestion().getQuestion());
+
+                            for (int i = 0; i < data.getQuestion().getOptions().size(); i++) {
+                                RadioButton rdbtn = new RadioButton(OffersActivity.this);
+                                rdbtn.setId(i);
+                                rdbtn.setText(data.getQuestion().getOptions().get(i).getDisplay_name());
+                                rg.addView(rdbtn);
+                            }
+                            btn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+//                                    rg.getCheckedRadioButtonId()
+                                }
+                            });
+                            dialog.show();
+
+                        }
+                    }
+                });
 
             }
         }
