@@ -10,9 +10,9 @@ class ProfileResponse {
     private String location="";
     private String type="";
     private String plan_name="";
-    private int age=0;
-    private int balance=0;
-    private int netbalance=0;
+    private String age="";
+    private String balance="";
+    private String netbalance="";
     private int plan=0;
     private int validity=0;
     ArrayList<String> services;
@@ -73,27 +73,27 @@ class ProfileResponse {
         this.plan_name = plan_name;
     }
 
-    public int getAge() {
+    public String getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(String age) {
         this.age = age;
     }
 
-    public int getBalance() {
+    public String getBalance() {
         return balance;
     }
 
-    public void setBalance(int balance) {
+    public void setBalance(String balance) {
         this.balance = balance;
     }
 
-    public int getNetbalance() {
+    public String getNetbalance() {
         return netbalance;
     }
 
-    public void setNetbalance(int netbalance) {
+    public void setNetbalance(String netbalance) {
         this.netbalance = netbalance;
     }
 

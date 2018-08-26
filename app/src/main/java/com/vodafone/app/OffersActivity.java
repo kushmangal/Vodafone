@@ -17,12 +17,16 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.flaviofaria.kenburnsview.KenBurnsView;
 import com.github.florent37.diagonallayout.DiagonalLayout;
+import com.github.jinatonic.confetti.CommonConfetti;
+import com.github.jinatonic.confetti.ConfettiManager;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -51,6 +55,12 @@ public class OffersActivity extends AppCompatActivity {
     @Bind(R.id.no_offers)
     TextView no_offers;
 
+    @Bind(R.id.main_layout)
+    LinearLayout main_layout;
+
+    @Bind(R.id.ken)
+    KenBurnsView ken;
+
 
     OffersAdapter adapter;
     SharedPreferences pref;
@@ -64,7 +74,23 @@ public class OffersActivity extends AppCompatActivity {
         setContentView(R.layout.activity_offers);
         ButterKnife.bind(this);
 
+
         target_id = getIntent().getStringExtra("target_id");
+        if(target_id.equalsIgnoreCase("shopping"))
+            Picasso.with(getApplicationContext()).load("https://cdn.pixabay.com/photo/2016/03/23/19/38/shopping-cart-1275480_1280.jpg").into(ken);
+            else if(target_id.equalsIgnoreCase("sports"))
+                Picasso.with(getApplicationContext()).load("https://cdn.pixabay.com/photo/2012/11/28/11/11/quarterback-67701_1280.jpg").into(ken);
+        else if(target_id.equalsIgnoreCase("entertainment"))
+            Picasso.with(getApplicationContext()).load("https://cdn.pixabay.com/photo/2015/07/30/17/24/audience-868074_1280.jpg").into(ken);
+        else if(target_id.equalsIgnoreCase("fashion"))
+            Picasso.with(getApplicationContext()).load("https://cdn.pixabay.com/photo/2014/05/21/14/54/feet-349687_1280.jpg").into(ken);
+        else if(target_id.equalsIgnoreCase("travel"))
+            Picasso.with(getApplicationContext()).load("https://cdn.pixabay.com/photo/2016/01/09/18/27/old-1130731_1280.jpg").into(ken);
+        else if(target_id.equalsIgnoreCase("food"))
+            Picasso.with(getApplicationContext()).load("https://cdn.pixabay.com/photo/2017/08/30/17/12/waffle-heart-2697904_1280.jpg").into(ken);
+        else
+            Picasso.with(getApplicationContext()).load("https://ibb.co/fGKrJU").into(ken);
+
         pref = getSharedPreferences("VF_Pref", Context.MODE_PRIVATE);
         pref_editor = pref.edit();
         offers_recycler.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
@@ -128,7 +154,7 @@ public class OffersActivity extends AppCompatActivity {
                 API_RESPONSE data = response.body();
                 if (data != null) {
                     if (data.getStatus() == 1) {
-                        offers.get(position).setIsRedeemed(1);
+
                         offers.remove(position);
                         Toast.makeText(getApplicationContext(),data.getMsg() ,Toast.LENGTH_SHORT ).show();
                         offers_recycler.getAdapter().notifyItemRemoved(position);
@@ -233,9 +259,6 @@ public class OffersActivity extends AppCompatActivity {
         @Override
         public int getItemCount() {
             if (offers == null) {
-                no_offers.setVisibility(View.VISIBLE);
-                offers_recycler.setVisibility(View.GONE);
-                diagonalLayout.setVisibility(View.GONE);
                 return 0;
             }
             return offers.size();
