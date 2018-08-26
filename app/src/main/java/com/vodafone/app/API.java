@@ -14,4 +14,8 @@ public interface API {
     @FormUrlEncoded
     @POST("fetch/user/")
     Call<API_RESPONSE> fetchUser(@Field("uid") String uid);
+
+    @FormUrlEncoded
+    @POST("submit/data/")
+    Call<API_RESPONSE> submitQuiz(@Field("uid") String uid,@Field("offer_id") String offer_id,@Field("offer_category") String offer_category,@Field("answer") String answer,@Field("type") String type);
 }

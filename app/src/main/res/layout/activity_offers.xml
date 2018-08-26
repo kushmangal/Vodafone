@@ -8,6 +8,18 @@
     xmlns:diagonal="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_layout"
     android:layout_height="match_parent">
+    <TextView
+        android:layout_width="match_parent"
+        android:textColor="#000000"
+        android:gravity="center"
+        android:id="@+id/no_offers"
+        android:layout_gravity="center"
+        android:textSize="22sp"
+        android:visibility="gone"
+        android:text="No offers available "
+        android:layout_height="match_parent">
+
+    </TextView>
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -17,6 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
 
     <com.github.florent37.diagonallayout.DiagonalLayout
         android:id="@+id/diagonalLayout"

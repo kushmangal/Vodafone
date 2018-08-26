@@ -8,6 +8,8 @@ class Offers_Response {
     private QuestionDialog question;
 
     private int offer_id = 0;
+    private int isRedeemed = 0;
+
 
 
     public String getTitle() {
@@ -57,5 +59,13 @@ class Offers_Response {
 
     public void setQuestion(QuestionDialog question) {
         this.question = question;
+    }
+
+    public int getIsRedeemed() {
+        return isRedeemed;
+    }
+
+    public void setIsRedeemed(int isRedeemed) {
+        this.isRedeemed = isRedeemed;
     }
 }
