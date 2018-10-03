@@ -1,0 +1,42 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <shortcut
+        android:shortcutId="Offers"
+        android:enabled="true"
+        android:icon="@drawable/offers"
+        android:shortcutShortLabel="@string/shortcut_offers"
+        android:shortcutLongLabel="@string/shortcut_offers">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.vodafone.app"
+            android:targetClass="com.vodafone.app.OffersActivity" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="Profile"
+        android:enabled="true"
+        android:icon="@drawable/profile"
+        android:shortcutShortLabel="@string/shortcut_profile"
+        android:shortcutLongLabel="@string/shortcut_profile">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.vodafone.app"
+            android:targetClass="com.vodafone.app.ProfileActivity" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="Voice"
+        android:enabled="true"
+        android:icon="@drawable/profile"
+        android:shortcutShortLabel="@string/shortcut_profile"
+        android:shortcutLongLabel="@string/shortcut_profile">
+        <intent
+            android:action="android.intent.action.ACTION_RECOGNIZE_SPEECH"
+            android:targetPackage="com.vodafone.app"
+            android:targetClass="com.vodafone.app.MainActivity" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+
+</shortcuts>

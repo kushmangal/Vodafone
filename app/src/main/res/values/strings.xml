@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Vodafone</string>
+    <string name="apiUrl">https://api200.dailyprepapp.com/v4/vodafone/</string>
+    <string name="shortcut_offers">Offers</string>
+    <string name="shortcut_profile">Profile</string>
+    <string name="title_activity_conf">ConfActivity</string>
 </resources>
