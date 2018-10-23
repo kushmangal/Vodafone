@@ -304,7 +304,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private static class MyTask extends AsyncTask<AIRequest, Void, AIResponse> {
-        final AIConfiguration config = new AIConfiguration("c46d686cc3174bd1a9736149f4ed3866",
+        final AIConfiguration config = new AIConfiguration("",
                 AIConfiguration.SupportedLanguages.English,
                 AIConfiguration.RecognitionEngine.System);
 
