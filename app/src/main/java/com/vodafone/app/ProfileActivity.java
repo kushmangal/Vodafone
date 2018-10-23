@@ -82,7 +82,11 @@ public class ProfileActivity extends AppCompatActivity {
                     if (data.getStatus() == 1) {
                             ProfileResponse user = data.getUser();
                             if(user!=null) {
-                                name.setText(user.getName());
+                                if(user.getName().length() > 0){
+                                    name.setText(user.getName());
+                                }else{
+                                    name.setText("New User");
+                                }
                                 number.setText(user.getNumber());
                                 balance.setText("₹"+String.valueOf(user.getBalance()));
                                 dataBalance.setText(String.valueOf(user.getNetbalance())+" MB");
